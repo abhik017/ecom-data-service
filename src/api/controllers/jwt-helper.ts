@@ -11,13 +11,14 @@ export class JwtHelper {
             const authToken: string | undefined = (authHeader.split(' '))[2];
             jwt.verify(authToken, process.env.ACCESS_TOKEN_SECRET as string, (err, payload) => {
                 if(err) {
-                    throw "The auth token is not valid!";
+                    response.status(httpStatus.UNAUTHORIZED).send("The user is unauthorized!");
+                } else {
+                    request.payload = payload;
                 }
-                request.payload = payload;
             });
         } catch(err) {
             console.log(err);
-            response.status(httpStatus.UNAUTHORIZED).send("The user is Unauthorized!");
+            response.status(httpStatus.UNAUTHORIZED).send("The user cannot be authorized!");
         }
     }
 }
